@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Vocabulario: El Pésame y la Investigación (Nivel C1)</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #e74c3c;
+            --accent: #3498db;
+            --bg: #fdfbf7;
+            --box-bg: #ffffff;
+            --text: #333333;
+            --correct: #27ae60;
+            --incorrect: #c0392b;
+            --typo: #e67e22;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: var(--box-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            border-bottom: 3px solid var(--accent);
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: var(--secondary);
+            margin-top: 40px;
+            border-left: 5px solid var(--secondary);
+            padding-left: 15px;
+        }
+        .instructions {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-style: italic;
+            color: var(--primary);
+        }
+        .question {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .question label {
+            flex-grow: 1;
+        }
+        input[type="text"], select {
+            padding: 8px 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 6px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+            outline: none;
+            min-width: 200px;
+        }
+        input[type="text"]:focus, select:focus {
+            border-color: var(--accent);
+        }
+        .word-bank {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #f1f2f6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        .word-bank span {
+            background: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            border: 1px solid #dcdde1;
+        }
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-top: 50px;
+            background-color: var(--primary);
+            color: white;
+            font-size: 1.2em;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .btn-submit:hover {
+            background-color: #1a252f;
+        }
+        #result-container {
+            display: none;
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            background-color: #f1f2f6;
+        }
+        .correct-ans {
+            color: var(--correct);
+            font-weight: bold;
+            margin-left: 10px;
+            display: none;
+            font-size: 0.9em;
+        }
+        .status-icon {
+            font-size: 1.2em;
+            margin-left: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Test de Vocabulario (C1) - El Pésame y la Investigación</h1>
+        
+        <div class="instructions">
+            <strong>Instrucciones generales:</strong> Lee atentamente cada enunciado. Completa los espacios en blanco, traduce o selecciona la opción correcta según corresponda. Al finalizar, pulsa el botón "Mostrar las respuestas" para corregir tu test automáticamente y ver tu puntuación final. Se admiten hasta 2 errores tipográficos (o letras sueltas incorrectas) en respuestas largas. Escribe en minúsculas y sin puntos finales.
+        </div>
+
+        <!-- Ejercicio 1: Sinónimos -->
+        <h2>1. Búsqueda de sinónimos</h2>
+        <div class="instructions">Selecciona el sinónimo o la palabra/expresión que mejor corresponde a la definición dada.</div>
+        <div id="task1"></div>
+
+        <!-- Ejercicio 2: Traducción -->
+        <h2>2. Traducción del ruso al español</h2>
+        <div class="instructions">Traduce las siguientes expresiones o frases al español utilizando el vocabulario del libro. (Escribe la frase exacta en minúsculas).</div>
+        <div id="task2"></div>
+
+        <!-- Ejercicio 3: Preposiciones -->
+        <h2>3. Preposiciones</h2>
+        <div class="instructions">Escribe la preposición que falta en la frase (en, de, a, con, por...).</div>
+        <div id="task3"></div>
+
+        <!-- Ejercicio 4: Huecos -->
+        <h2>4. Completar las frases</h2>
+        <div class="instructions">Completa las frases con una de las palabras del recuadro. Conjuga o adapta si es estrictamente necesario, aunque la mayoría encajan tal cual.</div>
+        <div class="word-bank" id="wordBank"></div>
+        <div id="task4"></div>
+
+        <!-- Ejercicio 5: Emparejamiento (Significados) -->
+        <h2>5. Significados de expresiones e modismos</h2>
+        <div class="instructions">Selecciona la frase o modismo que corresponde al significado propuesto.</div>
+        <div id="task5"></div>
+
+        <!-- Ejercicio 6: Gramática -->
+        <h2>6. Gramática (Tiempos pasados, subjuntivo e imperativo)</h2>
+        <div class="instructions">Elige la forma verbal correcta que mejor complete la oración teniendo en cuenta la concordancia de tiempos, el modo (indicativo/subjuntivo) o el uso del imperativo.</div>
+        <div id="task6"></div>
+
+        <button class="btn-submit" onclick="checkAnswers()">Mostrar las respuestas y calcular resultado</button>
+        <div id="result-container">
+            Puntuación: <span id="score"></span> / <span id="total"></span> (<span id="percentage"></span>%)
+        </div>
+    </div>
+
+<script>
+    const data = {
+        task1: [{"q": "1. Estar muy cansado tras hacer muchas cosas.", "a": "tener un día muy ajetreado", "options": ["tener un día muy ajetreado", "atar camino", "hacerse el dormido"]}, {"q": "2. Persona muy alta y fuerte, corpulenta.", "a": "hombre fornido", "options": ["hombre fornido", "rostro enjuto", "chiflado"]}, {"q": "3. Heridas causadas por cuchillos o navajas.", "a": "heridas de arma blanca", "options": ["heridas de arma blanca", "meras sospechas", "gemidos"]}, {"q": "4. Expresión de condolencias por un fallecimiento.", "a": "pésame", "options": ["pésame", "brindis", "algarabía"]}, {"q": "5. Pasar completamente desapercibido, oculto.", "a": "inadvertido", "options": ["inadvertido", "agazapado", "infame"]}, {"q": "6. Recuperar la calma después de un susto o tristeza.", "a": "reponerse", "options": ["reponerse", "derrumbarse", "asumir"]}, {"q": "7. Documentos que muestran los movimientos de una cuenta.", "a": "extractos bancarios", "options": ["extractos bancarios", "cuentas de correo", "meras sospechas"]}, {"q": "8. Tener un carácter áspero, malhumorado.", "a": "carácter agrio", "options": ["carácter agrio", "rostro enjuto", "mente atribulada"]}, {"q": "9. Hacer dibujos o escribir rápidamente y mal.", "a": "garabatear", "options": ["garabatear", "atar camino", "rechistar"]}, {"q": "10. Estar completamente loco o haber perdido la razón.", "a": "chiflado", "options": ["chiflado", "ensimismado", "absorto"]}, {"q": "11. Causar un gran impacto o asombro en alguien, deslumbrar.", "a": "me ha dejado de piedra", "options": ["me ha dejado de piedra", "ahogarse en lágrimas", "palpitar las sienes"]}, {"q": "12. Evitar el contacto, eludir a una persona o problema.", "a": "esquivar", "options": ["esquivar", "afrontar", "añorar"]}, {"q": "13. Sin castigo tras cometer un delito.", "a": "impune", "options": ["impune", "furtivo", "repentino"]}, {"q": "14. Ruido, griterío, voces confusas de una multitud.", "a": "algarabía", "options": ["algarabía", "velada", "cotidianidad"]}, {"q": "15. Expresar un punto de vista de manera rotunda e indiscutible.", "a": "sentenciar tajante", "options": ["sentenciar tajante", "murmurar", "rechistar"]}, {"q": "16. Estar concentrado en sus propios pensamientos, ausente.", "a": "ensimismado", "options": ["ensimismado", "irascible", "ajeno"]}, {"q": "17. Salir de un vehículo, bajar.", "a": "apearse", "options": ["apearse", "asentar", "deambular"]}, {"q": "18. Caminar sin rumbo fijo.", "a": "deambular", "options": ["deambular", "rastrear", "atajar camino"]}, {"q": "19. Destruir por completo, arrasar con algo.", "a": "arrasar", "options": ["arrasar", "deslumbrar", "perturbar"]}, {"q": "20. Una mirada inteligente, astuta y profunda.", "a": "mirada sagaz", "options": ["mirada sagaz", "ojos almendrados", "rostro amigable"]}, {"q": "21. Desaparecer rápidamente, como el humo.", "a": "esfumarse", "options": ["esfumarse", "desenmascarar", "delatar"]}, {"q": "22. Mostrar la verdadera cara de alguien, descubrir su engaño.", "a": "desenmascarar", "options": ["desenmascarar", "engarzar", "delatar"]}, {"q": "23. Discutir agresivamente hasta empezar a golpearse.", "a": "llegar a las manos", "options": ["llegar a las manos", "encararse", "tirar por la borda"]}, {"q": "24. Una persona muy enfadada o furiosa.", "a": "encabronado", "options": ["encabronado", "irascible", "ajeno"]}, {"q": "25. Sentir nostalgia o echar mucho de menos algo/alguien.", "a": "añorar", "options": ["añorar", "profesar", "rememorar"]}, {"q": "26. Ruido sordo producido al quejarse de dolor o placer.", "a": "gemidos", "options": ["gemidos", "hervidero de voces", "algarabía"]}, {"q": "27. Un impulso repentino, ataque emocional o de furia.", "a": "arrebato", "options": ["arrebato", "delirio", "perjuicio"]}, {"q": "28. Tener los ojos en forma de almendra.", "a": "ojos almendrados", "options": ["ojos almendrados", "bolsas bajo los ojos", "mirada sagaz"]}, {"q": "29. Una tarde sin importancia, común y aburrida.", "a": "anodina tarde", "options": ["anodina tarde", "velada crucial", "jornada interminable"]}, {"q": "30. Parar o hacer callar los ruidos o voces.", "a": "acallar", "options": ["acallar", "reprimir", "disipar"]}],
+        task2: [{"q": "1. что-то необычное, выходящее за рамки обычного", "a": "algo fuera de lo habitual"}, {"q": "2. насколько мне известно", "a": "que yo sepa"}, {"q": "3. мишень для преступника", "a": "diana de ningún criminal"}, {"q": "4. проводить проверки", "a": "realizar comprobaciones"}, {"q": "5. Это чистая формальность", "a": "es pura rutina"}, {"q": "6. никоим образом", "a": "en modo alguno"}, {"q": "7. успешная карьера", "a": "carrera fructífera"}, {"q": "8. тёмные мешки под глазами", "a": "oscuras bolsas bajo los ojos"}, {"q": "9. хриплый голос", "a": "voz ronca"}, {"q": "10. худощавое лицо", "a": "rostro enjuto"}, {"q": "11. высокий хвост (причёска)", "a": "coleta alta"}, {"q": "12. полные губы", "a": "labios carnosos"}, {"q": "13. бесконечные рабочие дни", "a": "jornadas interminables"}, {"q": "14. вихрь эмоций", "a": "torbellino de emociones"}, {"q": "15. сцепить руки", "a": "entrelazar las manos"}, {"q": "16. простые подозрения", "a": "meras sospechas"}, {"q": "17. вызвать ком в горле", "a": "anudar la garganta"}, {"q": "18. притвориться спящим", "a": "hacerse el dormido"}, {"q": "19. трудные переговоры", "a": "ardua negociación"}, {"q": "20. горстка родственников", "a": "puñado de familiares"}, {"q": "21. сдерживать слёзы", "a": "reprimir las lágrimas"}, {"q": "22. вопросы становились настойчивее", "a": "arreciar las preguntas"}, {"q": "23. утренний разговор", "a": "charla matutina"}, {"q": "24. поток свежего воздуха", "a": "corriente de aire fresco"}, {"q": "25. уклончивые жесты", "a": "gestos esquivos"}, {"q": "26. положительный тест на беременность", "a": "prueba de embarazo positiva"}, {"q": "27. душевные мучения", "a": "tribulaciones"}, {"q": "28. логистический подвиг", "a": "hazaña logística"}, {"q": "29. посетители", "a": "comensales"}, {"q": "30. алиби", "a": "coartada"}],
+        task3: [{"q": "1. Quiero trasladarle mi pésame ___ la muerte de su esposa.", "a": "por"}, {"q": "2. Tengo que hablarle ___ franqueza.", "a": "con"}, {"q": "3. La víctima tenía heridas ___ arma blanca.", "a": "de"}, {"q": "4. Debe acceder ___ las cuentas de correo.", "a": "a"}, {"q": "5. No participará ___ modo alguno en el caso.", "a": "en"}, {"q": "6. Rastrearon todo el entorno ___ busca de pistas.", "a": "en"}, {"q": "7. Asignaron ___ su mando a tres cabos.", "a": "bajo"}, {"q": "8. Es un detective ___ mirada sagaz.", "a": "de"}, {"q": "9. Tiene un fuerte gusto ___ la bebida.", "a": "por"}, {"q": "10. Le gusta mantenerse ajeno ___ confraternización.", "a": "a"}, {"q": "11. Mantiene una cómoda distancia ___ los cotilleos.", "a": "de"}, {"q": "12. El armario terminó por colmarse ___ expedientes.", "a": "de"}, {"q": "13. Se quedó de piedra ___ ver la escena.", "a": "al"}, {"q": "14. Sus sospechas se convirtieron ___ una obsesión.", "a": "en"}, {"q": "15. Decidió ahogarse ___ sus propias lágrimas.", "a": "en"}, {"q": "16. Se amparó bajo el abrigo ___ la noche.", "a": "de"}, {"q": "17. El matrimonio se derrumbó ___ pena y rabia.", "a": "de"}, {"q": "18. Fue bombardeado ___ imágenes del pasado.", "a": "con"}, {"q": "19. La ceremonia se celebró ___ la ermita.", "a": "en"}, {"q": "20. Fueron progresando al compás ___ una vida juntos.", "a": "de"}, {"q": "21. Trataba de despojarse ___ aquella sensación de irrealidad.", "a": "de"}, {"q": "22. Se excusó ___ la tardanza al llegar.", "a": "por"}, {"q": "23. Se pasaba el día ensimismado ___ sus pensamientos.", "a": "en"}, {"q": "24. El jarrón reposaba ___ la repisa de la entrada.", "a": "en"}, {"q": "25. Su nueva empresa era del sector ferroviario, ___ concreto trenes.", "a": "en"}, {"q": "26. Decidió asentar su vida ___ un magnífico piso.", "a": "en"}, {"q": "27. Terminó siendo engullido ___ la ola de problemas.", "a": "por"}, {"q": "28. Fueron sumidos ___ el silencio más absoluto.", "a": "en"}, {"q": "29. Logró apearse ___ vehículo a tiempo.", "a": "del"}, {"q": "30. No dudó en encararse ___ el director.", "a": "con"}],
+        task4: [{"q": "1. Hoy no podré quedar, tengo un día muy [_____].", "a": "ajetreado"}, {"q": "2. La policía está realizando [_____] en el piso.", "a": "comprobaciones"}, {"q": "3. La inspectora tuvo una carrera corta pero [_____].", "a": "fructífera"}, {"q": "4. El tabaco le había dejado una voz muy [_____].", "a": "ronca"}, {"q": "5. Tuvieron que convocar una reunión de [_____] tras el asesinato.", "a": "urgencia"}, {"q": "6. Destacaban en su rostro los labios [_____] y rojos.", "a": "carnosos"}, {"q": "7. Lloró tanto que el [_____] se le corrió por las mejillas.", "a": "rímel"}, {"q": "8. Actuó sin pensar en el [_____] que causaría a la empresa.", "a": "perjuicio"}, {"q": "9. Su mente era un [_____] de emociones incontrolables.", "a": "torbellino"}, {"q": "10. Se sentía completamente sola y [_____] ante el peligro.", "a": "desvalida"}, {"q": "11. Ningún crimen de esta magnitud debería quedar [_____].", "a": "impune"}, {"q": "12. Al escuchar la noticia, me quedé de [_____].", "a": "piedra"}, {"q": "13. Tuvo que [_____] la responsabilidad de sus actos.", "a": "asumir"}, {"q": "14. Aquel beso [_____] en la oscuridad cambió su vida.", "a": "robado"}, {"q": "15. De la tensión, le palpitaban las [_____] con fuerza.", "a": "sienes"}, {"q": "16. Cumplió la orden sin [_____] ni quejarse.", "a": "rechistar"}, {"q": "17. El huracán de problemas [_____] con su matrimonio.", "a": "arrasó"}, {"q": "18. Alzaron las copas para hacer un [_____] por los novios.", "a": "brindis"}, {"q": "19. La habitación apestaba a los [_____] del alcohol.", "a": "efluvios"}, {"q": "20. El calor del verano en la ciudad era [_____].", "a": "abrasador"}, {"q": "21. Se sentó a [_____] los viejos tiempos con melancolía.", "a": "rememorar"}, {"q": "22. No puedes tirar por la [_____] tantos años de esfuerzo.", "a": "borda"}, {"q": "23. Los médicos le prohibieron [_____] más alcohol.", "a": "ingerir"}, {"q": "24. Buscaba un [_____] de luz en aquella habitación oscura.", "a": "resquicio"}, {"q": "25. Llegaron a puntos [_____] en su investigación.", "a": "cruciales"}, {"q": "26. El ladrón logró pasar [_____] entre la multitud.", "a": "inadvertido"}, {"q": "27. Lanzó un vistazo [_____] para que nadie lo notara.", "a": "furtivo"}, {"q": "28. El sospechoso tenía unas ideas completamente [_____].", "a": "descabelladas"}, {"q": "29. Deberías mantener una distancia [_____] por seguridad.", "a": "prudencial"}, {"q": "30. El nuevo inspector era un [_____] de pura cepa.", "a": "bilbaíno"}],
+        task5: [{"q": "1. 'Fuera de lo habitual'", "a": "Algo inusual o que rompe la rutina.", "options": ["Algo inusual o que rompe la rutina.", "Un sitio fuera de la ciudad.", "Una persona que vive lejos."]}, {"q": "2. 'Tirar por la borda'", "a": "Desperdiciar algo valioso o arruinar el trabajo de mucho tiempo.", "options": ["Desperdiciar algo valioso o arruinar el trabajo de mucho tiempo.", "Tirar la basura.", "Navegar en un barco de vela."]}, {"q": "3. 'Que yo sepa'", "a": "Según la información de la que dispongo, hasta donde tengo entendido.", "options": ["Según la información de la que dispongo, hasta donde tengo entendido.", "Porque soy muy inteligente.", "Aprender algo nuevo."]}, {"q": "4. 'Ser la diana'", "a": "Convertirse en el objetivo de ataques, burlas o sospechas.", "options": ["Convertirse en el objetivo de ataques, burlas o sospechas.", "Practicar tiro con arco.", "Estar de moda."]}, {"q": "5. 'Es pura rutina'", "a": "Un procedimiento normal que se hace siempre sin excepciones.", "options": ["Un procedimiento normal que se hace siempre sin excepciones.", "Una forma de aburrirse.", "Un entrenamiento de gimnasio."]}, {"q": "6. 'Bajo su mando'", "a": "Tener a personas a su cargo, liderar un equipo.", "options": ["Tener a personas a su cargo, liderar un equipo.", "En el suelo del coche.", "Sin tener control de nada."]}, {"q": "7. 'Atajar camino'", "a": "Tomar una ruta más corta para llegar antes.", "options": ["Tomar una ruta más corta para llegar antes.", "Bloquear una carretera.", "Hacer un camino con piedras."]}, {"q": "8. 'Torbellino de emociones'", "a": "Sentir muchas cosas distintas y confusas al mismo tiempo.", "options": ["Sentir muchas cosas distintas y confusas al mismo tiempo.", "Un viento muy fuerte.", "Estar completamente en calma."]}, {"q": "9. 'Quedarse de piedra'", "a": "Sorprenderse muchísimo, quedar paralizado del asombro.", "options": ["Sorprenderse muchísimo, quedar paralizado del asombro.", "Estar muy duro o tenso.", "Encontrar una roca en el camino."]}, {"q": "10. 'Anudar la garganta'", "a": "Sentir un bloqueo por la emoción o las ganas de llorar.", "options": ["Sentir un bloqueo por la emoción o las ganas de llorar.", "Ponerse una corbata.", "Gritar muy fuerte."]}, {"q": "11. 'Hacerse el dormido'", "a": "Fingir que se está durmiendo.", "options": ["Fingir que se está durmiendo.", "Dormir mucho.", "No poder despertar."]}, {"q": "12. 'Sin rechistar'", "a": "Sin quejarse, sin decir ni una palabra en contra.", "options": ["Sin quejarse, sin decir ni una palabra en contra.", "Haciendo mucho ruido.", "Rechazando todo."]}, {"q": "13. 'Derrumbarse'", "a": "Caer en una gran tristeza, perder la entereza emocional.", "options": ["Caer en una gran tristeza, perder la entereza emocional.", "Destruir un edificio.", "Tirarse al suelo a descansar."]}, {"q": "14. 'Al compás de'", "a": "A la par, al mismo ritmo que otra cosa.", "options": ["A la par, al mismo ritmo que otra cosa.", "Usar un compás para dibujar.", "Fuera de tiempo."]}, {"q": "15. 'Despojarse de'", "a": "Quitarse algo (ropa, sentimientos, prejuicios) de encima.", "options": ["Quitarse algo (ropa, sentimientos, prejuicios) de encima.", "Robar las pertenencias a alguien.", "Tirar algo a la basura."]}, {"q": "16. 'Semilla anidando'", "a": "Una idea, duda o sentimiento que empieza a crecer poco a poco.", "options": ["Una idea, duda o sentimiento que empieza a crecer poco a poco.", "Pájaros en un nido.", "Plantar un árbol."]}, {"q": "17. 'Atenazar'", "a": "Paralizar a alguien por el miedo o la duda.", "options": ["Paralizar a alguien por el miedo o la duda.", "Usar herramientas para trabajar.", "Morder fuertemente."]}, {"q": "18. 'Corriente de aire fresco'", "a": "Algo que trae alivio, renovación o descanso.", "options": ["Algo que trae alivio, renovación o descanso.", "Dejar la ventana abierta.", "Tener frío en invierno."]}, {"q": "19. 'Ensimismado'", "a": "Metido en los propios pensamientos, ignorando el entorno.", "options": ["Metido en los propios pensamientos, ignorando el entorno.", "Ser muy egoísta.", "Estar muy aburrido."]}, {"q": "20. 'Engullido por la ola'", "a": "Ser superado o tragado por un gran problema o circunstancia.", "options": ["Ser superado o tragado por un gran problema o circunstancia.", "Ahogarse en el mar surfeando.", "Comer muy rápido."]}, {"q": "21. 'Sentenciar tajante'", "a": "Dar una respuesta firme, cortante y definitiva.", "options": ["Dar una respuesta firme, cortante y definitiva.", "Hacer un juicio en el tribunal.", "Gritar enfurecido."]}, {"q": "22. 'Hervidero de voces'", "a": "Lugar con mucho ruido de gente hablando a la vez.", "options": ["Lugar con mucho ruido de gente hablando a la vez.", "Agua hirviendo.", "Silencio sepulcral."]}, {"q": "23. 'Agazapado'", "a": "Escondido o encogido para no ser visto, preparado para saltar.", "options": ["Escondido o encogido para no ser visto, preparado para saltar.", "Estar disfrazado.", "Un tipo de animal."]}, {"q": "24. 'Distancia prudencial'", "a": "Separación suficiente para mantener la seguridad o privacidad.", "options": ["Separación suficiente para mantener la seguridad o privacidad.", "Una distancia muy larga y aburrida.", "Estar demasiado cerca."]}, {"q": "25. 'Acallar los gritos'", "a": "Hacer que cesen los ruidos, silenciar.", "options": ["Hacer que cesen los ruidos, silenciar.", "Empezar a gritar.", "Subir el volumen."]}, {"q": "26. 'Digerir la bilis'", "a": "Aguantar la rabia, el enfado o el asco que se siente.", "options": ["Aguantar la rabia, el enfado o el asco que se siente.", "Estar enfermo del estómago.", "Comer comida en mal estado."]}, {"q": "27. 'Llegar a las manos'", "a": "Pasar de la discusión verbal a la agresión física.", "options": ["Pasar de la discusión verbal a la agresión física.", "Darse la mano para saludar.", "Terminar un trabajo manual."]}, {"q": "28. 'Ideando una salida'", "a": "Pensando en una solución o plan de escape.", "options": ["Pensando en una solución o plan de escape.", "Buscando la puerta del edificio.", "Caminando sin rumbo."]}, {"q": "29. 'Más allá de lo imprescindible'", "a": "Hacer más de lo estrictamente necesario.", "options": ["Hacer más de lo estrictamente necesario.", "Algo inútil.", "Olvidar lo importante."]}, {"q": "30. 'Abrigo de la noche'", "a": "Protección y oscuridad que ofrece la madrugada para ocultarse.", "options": ["Protección y oscuridad que ofrece la madrugada para ocultarse.", "Un abrigo negro muy caro.", "Tener frío al dormir."]}],
+        task6: [{"q": "1. Es normal que él (tener) ___ un día muy ajetreado en la comisaría.", "a": "tenga", "options": ["tiene", "tenga", "tendrá"]}, {"q": "2. Inspector, (hablar - usted) ___ con franqueza, por favor.", "a": "hable", "options": ["habla", "hable", "habló"]}, {"q": "3. Dudaba que aquellas heridas (ser) ___ de arma blanca.", "a": "fueran", "options": ["son", "eran", "fuerun", "fueran"]}, {"q": "4. Si él se (reponer) ___ pronto de la noticia, le tomaríamos declaración.", "a": "repusiera", "options": ["reponga", "repone", "repusiera"]}, {"q": "5. Me pidieron que (realizar - yo) ___ comprobaciones de rutina.", "a": "realizara", "options": ["realicé", "realice", "realizara"]}, {"q": "6. No (acceder - tú) ___ a las cuentas de correo sin autorización del juez.", "a": "accedas", "options": ["accedes", "accedas", "accede"]}, {"q": "7. Era imposible que ese equipo (rastrear) ___ todo el entorno a tiempo.", "a": "rastreara", "options": ["rastreaba", "rastreó", "rastreara"]}, {"q": "8. El jefe le ordenó ayer: '(Convocar - tú) ___ una reunión de urgencia ahora mismo'.", "a": "Convoca", "options": ["Convoca", "Convoques", "Convocas"]}, {"q": "9. No creí que él (desplegar) ___ las copias del expediente delante de todos.", "a": "desplegara", "options": ["despliega", "desplegó", "desplegara"]}, {"q": "10. Te aconsejo que no (atajar) ___ camino por ese callejón oscuro.", "a": "atajes", "options": ["atajas", "atajes", "atajaste"]}, {"q": "11. Aunque su mesa (colmarse) ___ de archivos hoy, no se quedará horas extra.", "a": "se colme", "options": ["se colma", "se colme", "se colmó"]}, {"q": "12. Me alegró que no (quedar) ___ impune aquel asesinato.", "a": "quedara", "options": ["quedaba", "quedó", "quedara"]}, {"q": "13. Ojalá sus peores temores no (tomar) ___ forma.", "a": "tomaran", "options": ["tomaron", "tomarían", "tomaran"]}, {"q": "14. Le sorprendió que a su mujer se le (anudar) ___ la garganta al hablar del tema.", "a": "anudara", "options": ["anudaba", "anudó", "anudara"]}, {"q": "15. (Hacerse - vosotros) ___ los dormidos si escucháis ruidos en la casa.", "a": "Haceos", "options": ["Haceros", "Haceos", "Hacéis"]}, {"q": "16. No (rechistar - ustedes) ___ cuando lean el testamento.", "a": "rechisten", "options": ["rechistan", "rechisten", "rechistar"]}, {"q": "17. Le daba miedo que su vida (derrumbarse) ___ por completo.", "a": "se derrumbara", "options": ["se derrumba", "se derrumbaba", "se derrumbara"]}, {"q": "18. Me rogó que (afrontar) ___ las preguntas con valentía.", "a": "afrontara", "options": ["afronto", "afrontaría", "afrontara"]}, {"q": "19. Es una lástima que su compañero lo (delatar) ___ ayer en el juicio.", "a": "delatara", "options": ["delató", "delatara", "delataba"]}, {"q": "20. No (bombardear - tú) ___ mi duermevela con problemas de trabajo.", "a": "bombardees", "options": ["bombardeas", "bombardees", "bombardea"]}, {"q": "21. Si tú me lo pidieras, yo (reprimir) ___ las lágrimas.", "a": "reprimiría", "options": ["reprima", "reprimiera", "reprimiría"]}, {"q": "22. Antes de que (arreciar) ___ las preguntas, el testigo abandonó la sala.", "a": "arreciaran", "options": ["arreciaron", "arreciaban", "arreciaran"]}, {"q": "23. Era de esperar que sus celos (tirar) ___ por la borda años de felicidad.", "a": "tiraran", "options": ["tiraron", "tiraban", "tiraran"]}, {"q": "24. (Despojarse - usted) ___ de sus prejuicios antes de entrar en la sala.", "a": "Despójese", "options": ["Despójase", "Despójese", "Despoja"]}, {"q": "25. Te sugiero que (ingerir) ___ este medicamento para el dolor.", "a": "ingieras", "options": ["ingieres", "ingieras", "ingirieras"]}, {"q": "26. Me extrañó que la duda (anidar) ___ en su ánimo tan rápido.", "a": "anidara", "options": ["anidó", "anidaba", "anidara"]}, {"q": "27. No creo que la tormenta se (disipar) ___ esta noche.", "a": "disipe", "options": ["disipa", "disipe", "disipaba"]}, {"q": "28. Cuando ellos (asentar) ___ su vida en Madrid el próximo año, los visitaremos.", "a": "asienten", "options": ["asentaron", "asientan", "asienten"]}, {"q": "29. Siempre que (esfumarse) ___ el dinero, él se echaba la culpa.", "a": "se esfumaba", "options": ["se esfumaba", "se esfume", "se esfumara"]}, {"q": "30. (Acallar - tú) ___ a los perros, por favor, me duele la cabeza.", "a": "Acalla", "options": ["Acalles", "Acalla", "Acallar"]}]
+    };
+    const wordBankWords = ["abrasador", "ajetreado", "arrasó", "asumir", "bilbaíno", "borda", "brindis", "carnosos", "comprobaciones", "cruciales", "descabelladas", "desvalida", "efluvios", "fructífera", "furtivo", "impune", "inadvertido", "ingerir", "perjuicio", "piedra", "prudencial", "rechistar", "rememorar", "resquicio", "robado", "ronca", "rímel", "sienes", "torbellino", "urgencia"];
+
+    const normalize = (str) => {
+        return (str || "").toLowerCase().trim()
+            .replace(/[.,;!?]/g, "")
+            .replace(/\s+/g, " ");
+    };
+
+    const getEditDistance = (a, b) => {
+        if (a.length === 0) return b.length;
+        if (b.length === 0) return a.length;
+        const matrix = [];
+        for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+        for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+        for (let i = 1; i <= b.length; i++) {
+            for (let j = 1; j <= a.length; j++) {
+                if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                    matrix[i][j] = matrix[i - 1][j - 1];
+                } else {
+                    matrix[i][j] = Math.min(
+                        matrix[i - 1][j - 1] + 1,
+                        Math.min(matrix[i][j - 1] + 1, matrix[i - 1][j] + 1)
+                    );
+                }
+            }
+        }
+        return matrix[b.length][a.length];
+    };
+
+    function renderOptions(id, taskData) {
+        let html = '';
+        taskData.forEach((item, index) => {
+            html += `<div class="question"><label>${item.q}</label>
+                     <select data-ans="${item.a}">
+                        <option value="">-- Elige una opción --</option>`;
+            let ops = [...item.options].sort(() => Math.random() - 0.5);
+            ops.forEach(opt => { html += `<option value="${opt}">${opt}</option>`; });
+            html += `</select>
+            <span class="correct-ans"></span><span class="status-icon"></span></div>`;
+        });
+        document.getElementById(id).innerHTML = html;
+    }
+
+    function renderInputs(id, taskData) {
+        let html = '';
+        taskData.forEach((item, index) => {
+            html += `<div class="question"><label>${item.q}</label>
+                     <input type="text" data-ans="${item.a}" placeholder="Escribe aquí...">
+                     <span class="correct-ans"></span><span class="status-icon"></span></div>`;
+        });
+        document.getElementById(id).innerHTML = html;
+    }
+
+    let wbHtml = '';
+    wordBankWords.forEach(w => { wbHtml += `<span>${w}</span>`; });
+    document.getElementById('wordBank').innerHTML = wbHtml;
+
+    renderOptions('task1', data.task1);
+    renderInputs('task2', data.task2);
+    renderInputs('task3', data.task3);
+    
+    let t4html = '';
+    data.task4.forEach((item, index) => {
+        let qText = item.q.replace('[_____]', `<input type="text" data-ans="${item.a}" style="width: 150px; text-align: center;">`);
+        t4html += `<div class="question"><label>${qText}</label>
+                   <span class="correct-ans"></span><span class="status-icon"></span></div>`;
+    });
+    document.getElementById('task4').innerHTML = t4html;
+
+    renderOptions('task5', data.task5);
+    renderOptions('task6', data.task6);
+
+    function checkAnswers() {
+        let score = 0;
+        let total = 0;
+        
+        // Revisar selects
+        document.querySelectorAll('select').forEach(select => {
+            total++;
+            let ans = select.getAttribute('data-ans');
+            let parent = select.closest('.question');
+            let icon = parent.querySelector('.status-icon');
+            let ansLabel = parent.querySelector('.correct-ans');
+            
+            if (select.value === ans) {
+                score++;
+                select.style.borderColor = 'var(--correct)';
+                icon.innerHTML = '✅';
+                icon.style.color = 'var(--correct)';
+                ansLabel.style.display = 'none';
+            } else {
+                select.style.borderColor = 'var(--incorrect)';
+                icon.innerHTML = '❌';
+                icon.style.color = 'var(--incorrect)';
+                ansLabel.innerHTML = `Respuesta: ${ans}`;
+                ansLabel.style.color = 'var(--correct)';
+                ansLabel.style.display = 'inline';
+            }
+        });
+
+        // Revisar inputs con tolerancia a errores tipográficos (Levenshtein)
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            total++;
+            let ansRaw = input.getAttribute('data-ans');
+            let ans = normalize(ansRaw);
+            let val = normalize(input.value);
+            
+            let parent = input.closest('.question'); // Soluciona el problema de Block 4
+            let icon = parent.querySelector('.status-icon');
+            let ansLabel = parent.querySelector('.correct-ans');
+
+            let distance = getEditDistance(val, ans);
+            
+            // Tolerancia: 0 errores si la palabra es corta. 1-2 si es larga o frase.
+            let allowedTypos = 0;
+            if (ans.length > 3 && ans.length <= 7) allowedTypos = 1;
+            else if (ans.length > 7) allowedTypos = 2;
+            
+            if (val.length === 0) allowedTypos = 0; // Si no hay respuesta, no cuenta
+
+            let isCorrect = (val === ans) || (distance <= allowedTypos);
+
+            if (isCorrect) {
+                score++;
+                input.style.borderColor = 'var(--correct)';
+                icon.innerHTML = '✅';
+                icon.style.color = 'var(--correct)';
+                
+                if (distance > 0) {
+                    // Mostrar un pequeño aviso de la corrección tipográfica
+                    ansLabel.innerHTML = `(Aceptado con ${distance} ojalá/s. Exacto: ${ansRaw})`;
+                    ansLabel.style.color = 'var(--typo)';
+                    ansLabel.style.display = 'inline';
+                } else {
+                    ansLabel.style.display = 'none';
+                }
+            } else {
+                input.style.borderColor = 'var(--incorrect)';
+                icon.innerHTML = '❌';
+                icon.style.color = 'var(--incorrect)';
+                ansLabel.innerHTML = `Respuesta: ${ansRaw}`;
+                ansLabel.style.color = 'var(--correct)';
+                ansLabel.style.display = 'inline';
+            }
+        });
+
+        document.getElementById('score').innerText = score;
+        document.getElementById('total').innerText = total;
+        
+        // Calcular porcentaje
+        let percentage = Math.round((score / total) * 100);
+        document.getElementById('percentage').innerText = percentage;
+        
+        document.getElementById('result-container').style.display = 'block';
+        document.getElementById('result-container').scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+</body>
+</html>
